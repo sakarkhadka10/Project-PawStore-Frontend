@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Define Custom Fonts Here */
+@font-face {
+  font-family: "Fredoka";
+  src: url("./assets/fonts/Fredoka.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Heebo";
+  src: url("./assets/fonts/Heebo.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins.ttf") format("truetype");
+}
+
+/* Tailwind utilities with custom font */
+@layer utilities {
+  .font-fredoka {
+    font-family: "Fredoka", sans-serif;
+  }
+  .font-heebo {
+    font-family: "Heebo", sans-serif;
+  }
+  .font-poppins {
+    font-family: "Poppins", sans-serif;
+  }
+}
