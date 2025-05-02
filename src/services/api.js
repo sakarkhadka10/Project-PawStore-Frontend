@@ -46,6 +46,33 @@ export const fetchBreedById = async (id) => {
   }
 };
 
+export const createBreed = async (breedData) => {
+  try {
+    const { data } = await api.post("/breeds", breedData);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const updateBreed = async (id, breedData) => {
+  try {
+    const { data } = await api.put(`/breeds/${id}`, breedData);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const deleteBreed = async (id) => {
+  try {
+    const { data } = await api.delete(`/breeds/${id}`);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
 // Accessory API calls
 export const fetchAccessories = async (category = "all") => {
   try {
@@ -59,6 +86,33 @@ export const fetchAccessories = async (category = "all") => {
 export const fetchAccessoryById = async (id) => {
   try {
     const { data } = await api.get(`/accessories/${id}`);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const createAccessory = async (accessoryData) => {
+  try {
+    const { data } = await api.post("/accessories", accessoryData);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const updateAccessory = async (id, accessoryData) => {
+  try {
+    const { data } = await api.put(`/accessories/${id}`, accessoryData);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const deleteAccessory = async (id) => {
+  try {
+    const { data } = await api.delete(`/accessories/${id}`);
     return data;
   } catch (error) {
     throw error.response?.data?.message || error.message;
@@ -93,6 +147,33 @@ export const fetchBlogById = async (id) => {
   }
 };
 
+export const createBlog = async (blogData) => {
+  try {
+    const { data } = await api.post("/blogs", blogData);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const updateBlog = async (id, blogData) => {
+  try {
+    const { data } = await api.put(`/blogs/${id}`, blogData);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const deleteBlog = async (id) => {
+  try {
+    const { data } = await api.delete(`/blogs/${id}`);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
 // Contact API calls
 export const submitContactForm = async (formData) => {
   try {
@@ -108,6 +189,42 @@ export const login = async (email, password) => {
   try {
     const { data } = await api.post("/users/login", { email, password });
     localStorage.setItem("userInfo", JSON.stringify(data));
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    const { data } = await api.get("/users");
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const getUserById = async (id) => {
+  try {
+    const { data } = await api.get(`/users/${id}`);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const updateUser = async (id, userData) => {
+  try {
+    const { data } = await api.put(`/users/${id}`, userData);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const deleteUser = async (id) => {
+  try {
+    const { data } = await api.delete(`/users/${id}`);
     return data;
   } catch (error) {
     throw error.response?.data?.message || error.message;

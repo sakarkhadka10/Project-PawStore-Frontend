@@ -11,6 +11,16 @@ import RegisterPage from "../pages/Auth/RegisterPage";
 import CartPage from "../pages/Cart/CartPage";
 import AdminLayout from "../pages/Admin/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
+import AdminBreedsPage from "../pages/Admin/Breeds/AdminBreedsPage";
+import BreedForm from "../pages/Admin/Breeds/BreedForm";
+import AdminAccessoriesPage from "../pages/Admin/Accessories/AdminAccessoriesPage";
+import AccessoryForm from "../pages/Admin/Accessories/AccessoryForm";
+import AdminBlogsPage from "../pages/Admin/Blogs/AdminBlogsPage";
+import BlogForm from "../pages/Admin/Blogs/BlogForm";
+import AdminUsersPage from "../pages/Admin/Users/AdminUsersPage";
+import UserForm from "../pages/Admin/Users/UserForm";
+import AdminOrdersPage from "../pages/Admin/Orders/AdminOrdersPage";
+import OrderDetailPage from "../pages/Admin/Orders/OrderDetailPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const router = createBrowserRouter([
@@ -40,7 +50,29 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "dashboard", element: <AdminDashboard /> },
-      // Add more admin routes as needed
+
+      // Breeds Management
+      { path: "breeds", element: <AdminBreedsPage /> },
+      { path: "breeds/new", element: <BreedForm /> },
+      { path: "breeds/edit/:id", element: <BreedForm /> },
+
+      // Accessories Management
+      { path: "accessories", element: <AdminAccessoriesPage /> },
+      { path: "accessories/new", element: <AccessoryForm /> },
+      { path: "accessories/edit/:id", element: <AccessoryForm /> },
+
+      // Blogs Management
+      { path: "blogs", element: <AdminBlogsPage /> },
+      { path: "blogs/new", element: <BlogForm /> },
+      { path: "blogs/edit/:id", element: <BlogForm /> },
+
+      // Users Management
+      { path: "users", element: <AdminUsersPage /> },
+      { path: "users/edit/:id", element: <UserForm /> },
+
+      // Orders Management
+      { path: "orders", element: <AdminOrdersPage /> },
+      { path: "orders/:id", element: <OrderDetailPage /> },
     ],
   },
 ]);

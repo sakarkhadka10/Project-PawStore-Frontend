@@ -10,8 +10,6 @@ import {
   FaEnvelope,
   FaBars,
   FaRightFromBracket,
-  FaChevronDown,
-  FaChevronUp,
 } from "react-icons/fa6";
 import { useAuth } from "../../context/AuthContext";
 
@@ -34,7 +32,6 @@ const AdminLayout = () => {
     { name: "Blogs", icon: <FaBlog />, path: "/admin/blogs" },
     { name: "Users", icon: <FaUsers />, path: "/admin/users" },
     { name: "Orders", icon: <FaCartShopping />, path: "/admin/orders" },
-    { name: "Messages", icon: <FaEnvelope />, path: "/admin/messages" },
   ];
 
   const toggleSidebar = () => {
@@ -92,10 +89,10 @@ const AdminLayout = () => {
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4">
+        <div className="absolute bottom-0 w-fit  p-4">
           <button
             onClick={handleLogout}
-            className={`flex items-center py-2 px-4 text-red-400 hover:bg-gray-700 rounded transition-colors w-full ${
+            className={`flex items-center py-2 px-4 cursor-pointer text-red-400 hover:bg-gray-700 rounded-md transition-colors w-full ${
               sidebarOpen ? "justify-start" : "justify-center"
             }`}
           >
