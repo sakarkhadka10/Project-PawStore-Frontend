@@ -1,9 +1,19 @@
-import React, { useState } from "react";
-import { FaCartShopping, FaStar, FaRegStar, FaFilter } from "react-icons/fa6";
+import React, { useState, useEffect } from "react";
+import {
+  FaCartShopping,
+  FaStar,
+  FaRegStar,
+  FaFilter,
+  FaSpinner,
+} from "react-icons/fa6";
+import { fetchAccessories } from "../../services/api";
 
 const AccessoriesPage = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const categories = [
     { id: "all", name: "All Products" },
@@ -14,85 +24,21 @@ const AccessoriesPage = () => {
     { id: "grooming", name: "Grooming" },
   ];
 
-  const products = [
-    {
-      id: 1,
-      name: "Premium Dog Collar",
-      price: 24.99,
-      rating: 4.5,
-      image: "/pet-products/img1.jpg",
-      category: "collars",
-      bestseller: true,
-    },
-    {
-      id: 2,
-      name: "Plush Dog Bed",
-      price: 59.99,
-      rating: 5,
-      image: "/pet-products/img2.jpg",
-      category: "beds",
-      bestseller: false,
-    },
-    {
-      id: 3,
-      name: "Interactive Chew Toy",
-      price: 14.99,
-      rating: 4,
-      image: "/pet-products/img3.jpg",
-      category: "toys",
-      bestseller: true,
-    },
-    {
-      id: 4,
-      name: "Organic Dog Treats",
-      price: 12.99,
-      rating: 4.5,
-      image: "/pet-products/img4.jpg",
-      category: "food",
-      bestseller: false,
-    },
-    {
-      id: 5,
-      name: "Dog Grooming Brush",
-      price: 19.99,
-      rating: 4,
-      image: "/pet-products/img5.jpg",
-      category: "grooming",
-      bestseller: false,
-    },
-    {
-      id: 6,
-      name: "Retractable Dog Leash",
-      price: 29.99,
-      rating: 4.5,
-      image: "/pet-products/img6.jpg",
-      category: "collars",
-      bestseller: true,
-    },
-    {
-      id: 7,
-      name: "Premium Dry Dog Food",
-      price: 49.99,
-      rating: 5,
-      image: "/pet-products/img1.jpg",
-      category: "food",
-      bestseller: true,
-    },
-    {
-      id: 8,
-      name: "Squeaky Plush Toy",
-      price: 9.99,
-      rating: 3.5,
-      image: "/pet-products/img2.jpg",
-      category: "toys",
-      bestseller: false,
-    },
-  ];
+  useEffect(() => {
+    const getAccessories = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchAccessories(activeCategory);
+        setProducts(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.toString());
+        setLoading(false);
+      }
+    };
 
-  const filteredProducts =
-    activeCategory === "all"
-      ? products
-      : products.filter((product) => product.category === activeCategory);
+    getAccessories();
+  }, [activeCategory]);
 
   // Function to render star ratings
   const renderStars = (rating) => {
@@ -156,43 +102,66 @@ const AccessoriesPage = () => {
         </div>
       </div>
 
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        {filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-          >
-            <div className="relative">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-64 object-cover"
-              />
-              {product.bestseller && (
-                <span className="absolute top-2 right-2 bg-amber-600 text-white text-xs font-bold px-2 py-1 rounded">
-                  BESTSELLER
-                </span>
-              )}
-            </div>
-            <div className="p-4">
-              <h3 className="font-bold text-lg mb-1">{product.name}</h3>
-              <div className="flex items-center mb-2">
-                {renderStars(product.rating)}
-                <span className="ml-1 text-sm text-gray-500">
-                  ({product.rating})
-                </span>
+      {/* Loading and Error States */}
+      {loading ? (
+        <div className="flex justify-center items-center py-20">
+          <FaSpinner className="animate-spin text-amber-600 text-4xl" />
+        </div>
+      ) : error ? (
+        <div className="text-center py-20">
+          <p className="text-red-500 text-xl">{error}</p>
+          <p className="mt-4">Please try again later.</p>
+        </div>
+      ) : (
+        <>
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {products.map((product) => (
+              <div
+                key={product._id}
+                className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+              >
+                <div className="relative">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-64 object-cover"
+                  />
+                  {product.bestseller && (
+                    <span className="absolute top-2 right-2 bg-amber-600 text-white text-xs font-bold px-2 py-1 rounded">
+                      BESTSELLER
+                    </span>
+                  )}
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-lg mb-1">{product.name}</h3>
+                  <div className="flex items-center mb-2">
+                    {renderStars(product.rating)}
+                    <span className="ml-1 text-sm text-gray-500">
+                      ({product.rating})
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-lg">${product.price}</span>
+                    <button className="bg-amber-600 text-white p-2 rounded-full hover:bg-amber-700 transition-colors">
+                      <FaCartShopping />
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-lg">${product.price}</span>
-                <button className="bg-amber-600 text-white p-2 rounded-full hover:bg-amber-700 transition-colors">
-                  <FaCartShopping />
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+
+          {/* Fallback for no products */}
+          {products.length === 0 && !loading && !error && (
+            <div className="text-center py-20">
+              <p className="text-gray-500 text-xl">
+                No products found in this category.
+              </p>
+            </div>
+          )}
+        </>
+      )}
 
       {/* Promotion Banner */}
       <section className="bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl p-8 text-white text-center mb-12">

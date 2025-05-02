@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaLocationDot,
   FaPhone,
@@ -7,9 +7,50 @@ import {
   FaFacebook,
   FaTwitter,
   FaInstagram,
+  FaSpinner,
+  FaCircleCheck,
 } from "react-icons/fa6";
+import { submitContactForm } from "../../services/api";
 
 const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      await submitContactForm(formData);
+      setSuccess(true);
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      setError(err.toString());
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero Section */}
@@ -102,64 +143,112 @@ const ContactPage = () => {
         <section className="bg-white rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
 
-          <form>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label htmlFor="name" className="block text-gray-700 mb-2">
-                  Your Name
+          {success ? (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+              <FaCircleCheck className="text-green-500 text-4xl mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-green-800 mb-2">
+                Message Sent Successfully!
+              </h3>
+              <p className="text-green-700">
+                Thank you for contacting us. We'll get back to you as soon as
+                possible.
+              </p>
+              <button
+                onClick={() => setSuccess(false)}
+                className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
+              >
+                Send Another Message
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              {error && (
+                <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  {error}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label htmlFor="name" className="block text-gray-700 mb-2">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    placeholder="John Doe"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-gray-700 mb-2">
+                    Your Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    placeholder="john@example.com"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label htmlFor="subject" className="block text-gray-700 mb-2">
+                  Subject
                 </label>
                 <input
                   type="text"
-                  id="name"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  placeholder="John Doe"
+                  placeholder="How can we help you?"
                 />
               </div>
 
-              <div>
-                <label htmlFor="email" className="block text-gray-700 mb-2">
-                  Your Email
+              <div className="mb-6">
+                <label htmlFor="message" className="block text-gray-700 mb-2">
+                  Message
                 </label>
-                <input
-                  type="email"
-                  id="email"
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows="5"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  placeholder="john@example.com"
-                />
+                  placeholder="Your message here..."
+                ></textarea>
               </div>
-            </div>
 
-            <div className="mb-6">
-              <label htmlFor="subject" className="block text-gray-700 mb-2">
-                Subject
-              </label>
-              <input
-                type="text"
-                id="subject"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                placeholder="How can we help you?"
-              />
-            </div>
-
-            <div className="mb-6">
-              <label htmlFor="message" className="block text-gray-700 mb-2">
-                Message
-              </label>
-              <textarea
-                id="message"
-                rows="5"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                placeholder="Your message here..."
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              className="bg-amber-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-amber-700 transition-colors w-full sm:w-auto"
-            >
-              Send Message
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={loading}
+                className={`flex items-center justify-center bg-amber-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-amber-700 transition-colors w-full sm:w-auto ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
+              >
+                {loading ? (
+                  <>
+                    <FaSpinner className="animate-spin mr-2" /> Sending...
+                  </>
+                ) : (
+                  "Send Message"
+                )}
+              </button>
+            </form>
+          )}
         </section>
       </div>
 
