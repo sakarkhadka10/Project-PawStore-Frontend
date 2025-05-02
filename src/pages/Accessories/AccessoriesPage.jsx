@@ -5,8 +5,11 @@ import {
   FaRegStar,
   FaFilter,
   FaSpinner,
+  FaCheck,
 } from "react-icons/fa6";
 import { fetchAccessories } from "../../services/api";
+import { useCart } from "../../context/CartContext";
+import { toast } from "react-hot-toast";
 
 const AccessoriesPage = () => {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -14,6 +17,8 @@ const AccessoriesPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [addedToCart, setAddedToCart] = useState({});
+  const { addToCart } = useCart();
 
   const categories = [
     { id: "all", name: "All Products" },
@@ -39,6 +44,31 @@ const AccessoriesPage = () => {
 
     getAccessories();
   }, [activeCategory]);
+
+  // Function to handle adding product to cart
+  const handleAddToCart = (product) => {
+    addToCart(product);
+
+    // Show visual feedback
+    setAddedToCart((prev) => ({
+      ...prev,
+      [product._id]: true,
+    }));
+
+    // Reset after 2 seconds
+    setTimeout(() => {
+      setAddedToCart((prev) => ({
+        ...prev,
+        [product._id]: false,
+      }));
+    }, 2000);
+
+    // Show toast notification
+    toast.success(`${product.name} added to cart!`, {
+      position: "bottom-right",
+      duration: 2000,
+    });
+  };
 
   // Function to render star ratings
   const renderStars = (rating) => {
@@ -142,11 +172,28 @@ const AccessoriesPage = () => {
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-lg">${product.price}</span>
-                    <button className="bg-amber-600 text-white p-2 rounded-full hover:bg-amber-700 transition-colors">
-                      <FaCartShopping />
+                    <span className="font-bold text-lg">
+                      ${product.price.toFixed(2)}
+                    </span>
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className={`${
+                        addedToCart[product._id]
+                          ? "bg-green-600 hover:bg-green-700"
+                          : "bg-amber-600 hover:bg-amber-700"
+                      } text-white p-2 rounded-full transition-colors`}
+                      disabled={product.countInStock === 0}
+                    >
+                      {addedToCart[product._id] ? (
+                        <FaCheck />
+                      ) : (
+                        <FaCartShopping />
+                      )}
                     </button>
                   </div>
+                  {product.countInStock === 0 && (
+                    <p className="text-red-500 text-sm mt-2">Out of stock</p>
+                  )}
                 </div>
               </div>
             ))}

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import configData from "./utils/config.json";
 import "./App.css";
 import Footer from "./component/Main/Footer/Footer";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   useEffect(() => {
@@ -23,6 +24,7 @@ function App() {
       <footer>
         <Footer />
       </footer>
+      <Toaster position="bottom-right" />
     </>
   );
 }
