@@ -7,6 +7,8 @@ import {
   FaNewspaper,
   FaCircleCheck,
   FaCircleXmark,
+  FaEye,
+  FaXmark,
 } from "react-icons/fa6";
 import {
   getContactMessages,
@@ -27,6 +29,7 @@ const AdminMessagesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedMessage, setSelectedMessage] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,13 +66,13 @@ const AdminMessagesPage = () => {
       if (activeTab === "contact") {
         await deleteContactMessage(confirmDelete);
         setContactMessages(
-          contactMessages.filter((msg) => msg._id !== confirmDelete)
+          contactMessages.filter((msg) => msg._id !== confirmDelete),
         );
         toast.success("Message deleted successfully");
       } else {
         await deleteNewsletterSubscription(confirmDelete);
         setSubscriptions(
-          subscriptions.filter((sub) => sub._id !== confirmDelete)
+          subscriptions.filter((sub) => sub._id !== confirmDelete),
         );
         toast.success("Subscription deleted successfully");
       }
@@ -85,22 +88,35 @@ const AdminMessagesPage = () => {
         await updateContactStatus(id, newStatus);
         setContactMessages(
           contactMessages.map((msg) =>
-            msg._id === id ? { ...msg, status: newStatus } : msg
-          )
+            msg._id === id ? { ...msg, status: newStatus } : msg,
+          ),
         );
         toast.success("Status updated successfully");
       } else {
         await updateNewsletterStatus(id, newStatus);
         setSubscriptions(
           subscriptions.map((sub) =>
-            sub._id === id ? { ...sub, status: newStatus } : sub
-          )
+            sub._id === id ? { ...sub, status: newStatus } : sub,
+          ),
         );
         toast.success("Status updated successfully");
       }
     } catch (err) {
       toast.error(`Failed to update status: ${err.toString()}`);
     }
+  };
+
+  const handleViewMessage = (message) => {
+    setSelectedMessage(message);
+
+    // If the message is new, automatically mark it as read
+    if (message.status === "new") {
+      handleStatusChange(message._id, "read");
+    }
+  };
+
+  const closeMessageModal = () => {
+    setSelectedMessage(null);
   };
 
   // Filter data based on search term and status filter
@@ -115,7 +131,9 @@ const AdminMessagesPage = () => {
   });
 
   const filteredSubscriptions = subscriptions.filter((sub) => {
-    const matchesSearch = sub.email?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = sub.email
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase());
 
     if (statusFilter === "all") return matchesSearch;
     return matchesSearch && sub.status === statusFilter;
@@ -201,9 +219,7 @@ const AdminMessagesPage = () => {
           <FaSpinner className="animate-spin text-amber-600 text-4xl" />
         </div>
       ) : error ? (
-        <div className="bg-red-100 text-red-700 p-4 rounded-lg">
-          {error}
-        </div>
+        <div className="bg-red-100 text-red-700 p-4 rounded-lg">{error}</div>
       ) : activeTab === "contact" ? (
         // Contact Messages Table
         <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -253,8 +269,8 @@ const AdminMessagesPage = () => {
                             message.status === "new"
                               ? "bg-blue-100 text-blue-800"
                               : message.status === "read"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-green-100 text-green-800"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-green-100 text-green-800"
                           }`}
                         >
                           {message.status}
@@ -262,6 +278,13 @@ const AdminMessagesPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleViewMessage(message)}
+                            className="text-blue-600 hover:text-blue-900"
+                            title="View Message"
+                          >
+                            <FaEye />
+                          </button>
                           <select
                             value={message.status}
                             onChange={(e) =>
@@ -276,6 +299,7 @@ const AdminMessagesPage = () => {
                           <button
                             onClick={() => handleDeleteClick(message._id)}
                             className="text-red-600 hover:text-red-900"
+                            title="Delete Message"
                           >
                             <FaTrash />
                           </button>
@@ -347,7 +371,7 @@ const AdminMessagesPage = () => {
                                 subscription._id,
                                 subscription.status === "active"
                                   ? "unsubscribed"
-                                  : "active"
+                                  : "active",
                               )
                             }
                             className={`${
@@ -416,7 +440,104 @@ const AdminMessagesPage = () => {
         </div>
       )}
 
-      {/* Message Detail Modal (could be added in the future) */}
+      {/* Message Detail Modal */}
+      {selectedMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold">Message Details</h3>
+              <button
+                onClick={closeMessageModal}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <FaXmark className="text-xl" />
+              </button>
+            </div>
+
+            <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">From</p>
+                <p className="font-medium">{selectedMessage.name}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Email</p>
+                <p className="font-medium">{selectedMessage.email}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Date</p>
+                <p className="font-medium">
+                  {formatDate(selectedMessage.createdAt)}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Status</p>
+                <p>
+                  <span
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      selectedMessage.status === "new"
+                        ? "bg-blue-100 text-blue-800"
+                        : selectedMessage.status === "read"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-green-100 text-green-800"
+                    }`}
+                  >
+                    {selectedMessage.status}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-sm text-gray-500 mb-1">Subject</p>
+              <p className="font-medium text-lg">{selectedMessage.subject}</p>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-sm text-gray-500 mb-1">Message</p>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 whitespace-pre-wrap">
+                {selectedMessage.message}
+              </div>
+            </div>
+
+            <div className="flex justify-between">
+              <div>
+                <select
+                  value={selectedMessage.status}
+                  onChange={(e) => {
+                    handleStatusChange(selectedMessage._id, e.target.value);
+                    setSelectedMessage({
+                      ...selectedMessage,
+                      status: e.target.value,
+                    });
+                  }}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
+                >
+                  <option value="new">New</option>
+                  <option value="read">Read</option>
+                  <option value="responded">Responded</option>
+                </select>
+              </div>
+              <div className="space-x-3">
+                <button
+                  onClick={closeMessageModal}
+                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    handleDeleteClick(selectedMessage._id);
+                    closeMessageModal();
+                  }}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
