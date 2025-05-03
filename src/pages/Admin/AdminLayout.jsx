@@ -32,6 +32,7 @@ const AdminLayout = () => {
     { name: "Blogs", icon: <FaBlog />, path: "/admin/blogs" },
     { name: "Users", icon: <FaUsers />, path: "/admin/users" },
     { name: "Orders", icon: <FaCartShopping />, path: "/admin/orders" },
+    { name: "Messages", icon: <FaEnvelope />, path: "/admin/messages" },
   ];
 
   const toggleSidebar = () => {

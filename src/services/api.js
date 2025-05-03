@@ -184,6 +184,70 @@ export const submitContactForm = async (formData) => {
   }
 };
 
+export const getContactMessages = async () => {
+  try {
+    const { data } = await api.get("/contact");
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const updateContactStatus = async (id, status) => {
+  try {
+    const { data } = await api.put(`/contact/${id}`, { status });
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const deleteContactMessage = async (id) => {
+  try {
+    const { data } = await api.delete(`/contact/${id}`);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+// Newsletter API calls
+export const subscribeNewsletter = async (email) => {
+  try {
+    const { data } = await api.post("/newsletter", { email });
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const getNewsletterSubscriptions = async () => {
+  try {
+    const { data } = await api.get("/newsletter");
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const updateNewsletterStatus = async (id, status) => {
+  try {
+    const { data } = await api.put(`/newsletter/${id}`, { status });
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const deleteNewsletterSubscription = async (id) => {
+  try {
+    const { data } = await api.delete(`/newsletter/${id}`);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
 // User API calls
 export const login = async (email, password) => {
   try {

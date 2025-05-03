@@ -16,6 +16,8 @@ import {
   getAllOrders,
   getAllUsers,
   fetchBlogs,
+  getContactMessages,
+  getNewsletterSubscriptions,
 } from "../../../services/api";
 
 const AdminDashboard = () => {
@@ -34,13 +36,26 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
       try {
         // Fetch real data from the backend
-        const [breeds, accessories, blogs, users, orders] = await Promise.all([
+        const [
+          breeds,
+          accessories,
+          blogs,
+          users,
+          orders,
+          contacts,
+          newsletters,
+        ] = await Promise.all([
           fetchBreeds(),
           fetchAccessories(),
           fetchBlogs(),
           getAllUsers(),
           getAllOrders(),
+          getContactMessages(),
+          getNewsletterSubscriptions(),
         ]);
+
+        // Calculate total messages (contacts + newsletter subscriptions)
+        const totalMessages = contacts.length + newsletters.length;
 
         setStats({
           breeds: breeds.length,
@@ -48,7 +63,7 @@ const AdminDashboard = () => {
           blogs: blogs.length,
           users: users.length,
           orders: orders.length,
-          messages: 5, // This could be fetched from a messages API if available
+          messages: totalMessages,
         });
 
         // Set recent orders (most recent 5)

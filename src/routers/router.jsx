@@ -25,6 +25,7 @@ import AdminUsersPage from "../pages/Admin/Users/AdminUsersPage";
 import UserForm from "../pages/Admin/Users/UserForm";
 import AdminOrdersPage from "../pages/Admin/Orders/AdminOrdersPage";
 import OrderDetailPage from "../pages/Admin/Orders/OrderDetailPage";
+import AdminMessagesPage from "../pages/Admin/Messages/AdminMessagesPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const router = createBrowserRouter([
@@ -102,6 +103,9 @@ const router = createBrowserRouter([
       // Orders Management
       { path: "orders", element: <AdminOrdersPage /> },
       { path: "orders/:id", element: <OrderDetailPage /> },
+
+      // Messages Management
+      { path: "messages", element: <AdminMessagesPage /> },
     ],
   },
 ]);
