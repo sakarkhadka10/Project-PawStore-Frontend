@@ -124,7 +124,7 @@ const NavBar = () => {
                       My Profile
                     </Link>
                     <Link
-                      to="/orders"
+                      to="/my-orders"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setIsProfileMenuOpen(false)}
                     >
@@ -259,7 +259,7 @@ const NavBar = () => {
                   </li>
                   <li>
                     <Link
-                      to="/orders"
+                      to="/my-orders"
                       className="text-lg font-medium block hover:text-amber-600 transition-colors"
                       onClick={toggleMenu}
                     >

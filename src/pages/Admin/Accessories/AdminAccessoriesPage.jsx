@@ -171,7 +171,7 @@ const AdminAccessoriesPage = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        ${accessory.price.toFixed(2)}
+                        NPR {accessory.price.toFixed(2)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

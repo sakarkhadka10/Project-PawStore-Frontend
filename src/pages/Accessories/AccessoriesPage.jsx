@@ -18,7 +18,12 @@ const AccessoriesPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addedToCart, setAddedToCart] = useState({});
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
+
+  // Function to check if a product is in the cart
+  const isInCart = (productId) => {
+    return cartItems.some((item) => item._id === productId);
+  };
 
   const categories = [
     { id: "all", name: "All Products" },
@@ -47,6 +52,24 @@ const AccessoriesPage = () => {
 
   // Function to handle adding product to cart
   const handleAddToCart = (product) => {
+    // Check if product is in stock
+    if (product.countInStock <= 0) {
+      toast.error(`${product.name} is out of stock!`, {
+        position: "bottom-right",
+        duration: 2000,
+      });
+      return;
+    }
+
+    // Check if product is already in cart
+    if (isInCart(product._id)) {
+      toast.success(`${product.name} is already in your cart!`, {
+        position: "bottom-right",
+        duration: 2000,
+      });
+      return;
+    }
+
     addToCart(product);
 
     // Show visual feedback
@@ -173,21 +196,32 @@ const AccessoriesPage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-lg">
-                      ${product.price.toFixed(2)}
+                      NPR {product.price.toFixed(2)}
                     </span>
                     <button
                       onClick={() => handleAddToCart(product)}
                       className={`${
-                        addedToCart[product._id]
+                        addedToCart[product._id] || isInCart(product._id)
                           ? "bg-green-600 hover:bg-green-700"
-                          : "bg-amber-600 hover:bg-amber-700"
+                          : product.countInStock > 0
+                            ? "bg-amber-600 hover:bg-amber-700"
+                            : "bg-gray-400 cursor-not-allowed"
                       } text-white p-2 rounded-full transition-colors`}
                       disabled={product.countInStock === 0}
+                      title={
+                        product.countInStock === 0
+                          ? "Out of stock"
+                          : isInCart(product._id)
+                            ? "Already in cart"
+                            : "Add to cart"
+                      }
                     >
-                      {addedToCart[product._id] ? (
+                      {addedToCart[product._id] || isInCart(product._id) ? (
                         <FaCheck />
-                      ) : (
+                      ) : product.countInStock > 0 ? (
                         <FaCartShopping />
+                      ) : (
+                        <FaCartShopping className="opacity-50" />
                       )}
                     </button>
                   </div>

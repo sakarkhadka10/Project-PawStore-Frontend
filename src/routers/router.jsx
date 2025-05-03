@@ -5,10 +5,14 @@ import BreedsPage from "../pages/Breeds/BreedsPage";
 import BreedDetailPage from "../pages/Breeds/BreedDetailPage";
 import AccessoriesPage from "../pages/Accessories/AccessoriesPage";
 import BlogPage from "../pages/Blog/BlogPage";
+import BlogDetailPage from "../pages/Blog/BlogDetailPage";
 import ContactPage from "../pages/Contact/ContactPage";
 import LoginPage from "../pages/Auth/LoginPage";
 import RegisterPage from "../pages/Auth/RegisterPage";
 import CartPage from "../pages/Cart/CartPage";
+import CheckoutPage from "../pages/Checkout/CheckoutPage";
+import OrderConfirmationPage from "../pages/Checkout/OrderConfirmationPage";
+import UserOrdersPage from "../pages/User/UserOrdersPage";
 import AdminLayout from "../pages/Admin/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
 import AdminBreedsPage from "../pages/Admin/Breeds/AdminBreedsPage";
@@ -34,10 +38,35 @@ const router = createBrowserRouter([
       { path: "/breeds/:id", element: <BreedDetailPage /> },
       { path: "/accessories", element: <AccessoriesPage /> },
       { path: "/blog", element: <BlogPage /> },
+      { path: "/blog/:id", element: <BlogDetailPage /> },
       { path: "/contact", element: <ContactPage /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
       { path: "/cart", element: <CartPage /> },
+      {
+        path: "/checkout",
+        element: (
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/order-confirmation/:id",
+        element: (
+          <ProtectedRoute>
+            <OrderConfirmationPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/my-orders",
+        element: (
+          <ProtectedRoute>
+            <UserOrdersPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   // Admin Routes

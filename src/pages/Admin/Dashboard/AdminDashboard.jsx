@@ -10,7 +10,13 @@ import {
   FaArrowDown,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { fetchBreeds } from "../../../services/api";
+import {
+  fetchBreeds,
+  fetchAccessories,
+  getAllOrders,
+  getAllUsers,
+  fetchBlogs,
+} from "../../../services/api";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -22,22 +28,35 @@ const AdminDashboard = () => {
     messages: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [recentOrders, setRecentOrders] = useState([]);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // In a real app, you would fetch all these stats from the backend
-        // For now, we'll just simulate with some data
-        const breeds = await fetchBreeds();
+        // Fetch real data from the backend
+        const [breeds, accessories, blogs, users, orders] = await Promise.all([
+          fetchBreeds(),
+          fetchAccessories(),
+          fetchBlogs(),
+          getAllUsers(),
+          getAllOrders(),
+        ]);
 
         setStats({
           breeds: breeds.length,
-          accessories: 15,
-          blogs: 8,
-          users: 24,
-          orders: 12,
-          messages: 5,
+          accessories: accessories.length,
+          blogs: blogs.length,
+          users: users.length,
+          orders: orders.length,
+          messages: 5, // This could be fetched from a messages API if available
         });
+
+        // Set recent orders (most recent 5)
+        const sortedOrders = orders
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 5);
+        setRecentOrders(sortedOrders);
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching stats:", error);
@@ -99,43 +118,11 @@ const AdminDashboard = () => {
     },
   ];
 
-  const recentOrders = [
-    {
-      id: "ORD-001",
-      customer: "John Doe",
-      date: "2023-06-15",
-      status: "Delivered",
-      amount: 129.99,
-    },
-    {
-      id: "ORD-002",
-      customer: "Jane Smith",
-      date: "2023-06-14",
-      status: "Processing",
-      amount: 79.5,
-    },
-    {
-      id: "ORD-003",
-      customer: "Robert Johnson",
-      date: "2023-06-13",
-      status: "Shipped",
-      amount: 199.99,
-    },
-    {
-      id: "ORD-004",
-      customer: "Emily Davis",
-      date: "2023-06-12",
-      status: "Delivered",
-      amount: 149.95,
-    },
-    {
-      id: "ORD-005",
-      customer: "Michael Brown",
-      date: "2023-06-11",
-      status: "Cancelled",
-      amount: 89.99,
-    },
-  ];
+  // Function to format date
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   return (
     <div>
@@ -217,37 +204,50 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {recentOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {order.id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {order.customer}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {order.date}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            order.status === "Delivered"
-                              ? "bg-green-100 text-green-800"
-                              : order.status === "Processing"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : order.status === "Shipped"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {order.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${order.amount.toFixed(2)}
+                  {recentOrders.length > 0 ? (
+                    recentOrders.map((order) => (
+                      <tr key={order._id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {order._id
+                            .substring(order._id.length - 8)
+                            .toUpperCase()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {order.user?.name || "Unknown User"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {formatDate(order.createdAt)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              order.status === "Delivered"
+                                ? "bg-green-100 text-green-800"
+                                : order.status === "Processing"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : order.status === "Shipped"
+                                    ? "bg-blue-100 text-blue-800"
+                                    : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          ${order.totalPrice.toFixed(2)}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="px-6 py-4 text-center text-sm text-gray-500"
+                      >
+                        No orders found
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>

@@ -79,7 +79,7 @@ const CartPage = () => {
                     <div className="flex-1">
                       <h3 className="text-lg font-medium">{item.name}</h3>
                       <p className="text-amber-600 font-semibold mt-1">
-                        ${item.price.toFixed(2)}
+                        NPR {item.price.toFixed(2)}
                       </p>
                     </div>
                     <div className="flex items-center mt-4 sm:mt-0">
@@ -135,7 +135,9 @@ const CartPage = () => {
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">${totalPrice.toFixed(2)}</span>
+                  <span className="font-medium">
+                    NPR {totalPrice.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Shipping</span>
@@ -144,7 +146,7 @@ const CartPage = () => {
                 <div className="border-t border-gray-200 pt-4 flex justify-between">
                   <span className="font-semibold">Total</span>
                   <span className="font-bold text-xl">
-                    ${totalPrice.toFixed(2)}
+                    NPR {totalPrice.toFixed(2)}
                   </span>
                 </div>
               </div>
