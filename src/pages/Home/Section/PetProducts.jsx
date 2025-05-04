@@ -28,51 +28,56 @@ const PetProducts = () => {
   }, []);
 
   return (
-    <section className="py-16 px-4 my-8">
-      <div className="max-w-6xl mx-auto text-center">
-        {/* Section Header */}
-        <div className="mb-10">
-          <h3 className="text-3xl md:text-4xl font-bold mb-3">
-            Pet <span className="text-amber-600">Products</span>
-          </h3>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            All products are designed for ease of use and durability, as well as
-            looking good. You can choose your own colours to make your item
-            unique.
-          </p>
-          <div className="w-20 h-1 bg-amber-500 mx-auto mt-4 rounded-full"></div>
-        </div>
-
-        {/* Loading and Error States */}
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <FaSpinner className="animate-spin text-amber-600 text-4xl" />
-          </div>
-        ) : error ? (
-          <div className="text-center py-10">
-            <p className="text-red-500">
-              Error loading products. Please try again later.
+    <section className="py-16 px-4 my-8 bg-gray-50">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-12">
+          {/* Left Side - Text Content */}
+          <div className="md:w-2/5 text-left">
+            <h3 className="text-3xl md:text-4xl font-bold mb-3">
+              Pet<span className="text-amber-600"> Products</span>
+            </h3>
+            <p className="text-gray-600 mb-8">
+              All products are designed for ease of use and durability, as well
+              as looking good. You can choose your own colours to make your item
+              unique.
             </p>
-          </div>
-        ) : (
-          <>
-            {/* Products Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
-              {products.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-
-            {/* View All Button */}
             <Link
               to="/accessories"
-              className="inline-flex items-center px-5 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors duration-300 mt-4"
+              className="inline-flex items-center px-5 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors duration-300"
             >
-              View All Products
+              See more
               <FaArrowRight className="ml-2" size={12} />
             </Link>
-          </>
-        )}
+          </div>
+
+          {/* Right Side - Products Grid */}
+          <div className="md:w-1/2">
+            {/* Loading and Error States */}
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <FaSpinner className="animate-spin text-amber-600 text-4xl" />
+              </div>
+            ) : error ? (
+              <div className="text-center py-10">
+                <p className="text-red-500">
+                  Error loading products. Please try again later.
+                </p>
+              </div>
+            ) : (
+              /* Products Grid - 3x2 layout */
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-md mx-auto md:max-w-full">
+                {products.slice(0, 6).map((product) => (
+                  <div
+                    key={product._id}
+                    className="aspect-square max-w-[120px] sm:max-w-[150px] mx-auto"
+                  >
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );

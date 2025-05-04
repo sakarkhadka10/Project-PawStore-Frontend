@@ -13,7 +13,7 @@ const DogBreed = () => {
         setLoading(true);
         const data = await fetchBreeds();
         // Limit to 7 breeds for the homepage display
-        setBreeds(data.slice(0, 7));
+        setBreeds(data.slice(0, 6));
         setLoading(false);
       } catch (err) {
         console.error("Error fetching breeds:", err);
@@ -48,7 +48,7 @@ const DogBreed = () => {
           </div>
         ) : (
           /* Image Container */
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 mt-10 place-items-center gap-5 lg:gap-9 ">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 mt-10 place-items-center gap-5 lg:gap-9 ">
             {breeds.map((breed) => (
               <div
                 key={breed._id}

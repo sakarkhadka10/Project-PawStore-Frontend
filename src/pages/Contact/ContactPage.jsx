@@ -84,7 +84,7 @@ const ContactPage = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">Phone Number</h3>
-                <p className="text-gray-600">+977-[0]61-328463</p>
+                <p className="text-gray-600">+977-9865657440</p>
               </div>
             </div>
 
@@ -118,19 +118,19 @@ const ContactPage = () => {
             <h3 className="font-semibold text-lg mb-4">Follow Us</h3>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://facebook.com"
                 className="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors"
               >
                 <FaFacebook className="text-xl" />
               </a>
               <a
-                href="#"
+                href="https://twitter.com"
                 className="bg-sky-500 text-white p-3 rounded-full hover:bg-sky-600 transition-colors"
               >
                 <FaTwitter className="text-xl" />
               </a>
               <a
-                href="#"
+                href="  https://instagram.com"
                 className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-full hover:from-purple-600 hover:to-pink-600 transition-colors"
               >
                 <FaInstagram className="text-xl" />
@@ -181,7 +181,7 @@ const ContactPage = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                    placeholder="John Doe"
+                    placeholder="Sakar Khadka"
                   />
                 </div>
 
@@ -197,7 +197,7 @@ const ContactPage = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                    placeholder="john@example.com"
+                    placeholder="sakar@example.com"
                   />
                 </div>
               </div>

@@ -68,9 +68,29 @@ const Footer = () => {
 
           {/* Social Media */}
           <div className="flex items-center gap-5 text-xl cursor-pointer order-1 sm:order-2">
-            <FaFacebook className="text-[#4C7AEF] hover:opacity-80 transition-opacity" />
-            <FaYoutube className="text-[#DF2424] hover:opacity-80 transition-opacity" />
-            <FaInstagram className="text-[#A0007D] hover:opacity-80 transition-opacity" />
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebook className="text-[#4C7AEF] hover:opacity-80 transition-opacity" />
+            </a>
+
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaYoutube className="text-[#DF2424] hover:opacity-80 transition-opacity" />
+            </a>
+
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram className="text-[#A0007D] hover:opacity-80 transition-opacity" />
+            </a>
           </div>
 
           {/* Creator */}

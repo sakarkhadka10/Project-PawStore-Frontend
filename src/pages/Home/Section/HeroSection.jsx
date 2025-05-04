@@ -33,7 +33,7 @@ const HeroSection = () => {
 
         {/* Text Container */}
         <div className="text-start w-full max-w-[450px] px-4 sm:px-0 order-1 lg:order-2">
-          <span className="inline-block bg-amber-100 text-amber-800 px-4 py-1 rounded-full text-sm font-medium mb-4">
+          <span className="inline-block bg-amber-200 text-amber-800 px-4 py-1 rounded-full text-sm font-medium mb-4">
             Find Your Perfect Companion
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center lg:text-start leading-tight">
@@ -59,51 +59,41 @@ const HeroSection = () => {
               Contact Us
             </Link>
           </div>
-
-          <div className="mt-8 flex items-center gap-4">
-            <div className="flex -space-x-2">
-              <img
-                src="/blog/blog1.jpg"
-                alt="Customer"
-                className="w-10 h-10 rounded-full border-2 border-white object-cover"
-              />
-              <img
-                src="/blog/blog2.jpg"
-                alt="Customer"
-                className="w-10 h-10 rounded-full border-2 border-white object-cover"
-              />
-              <img
-                src="/blog/blog3.jpg"
-                alt="Customer"
-                className="w-10 h-10 rounded-full border-2 border-white object-cover"
-              />
-            </div>
-            <div>
-              <div className="flex items-center text-amber-500">
-                ★★★★★ <span className="text-gray-700 ml-1">5.0</span>
-              </div>
-              <p className="text-sm text-gray-600">
-                From 200+ happy pet owners
-              </p>
-            </div>
-          </div>
         </div>
       </main>
 
       {/* Social Media Icons */}
-      <footer>
-        <div className="absolute right-0 bottom-0 flex items-end gap-4 px-4 sm:px-6 lg:px-20 py-6 sm:py-8 lg:py-10 text-lg sm:text-xl">
-          <a href="#" className="hover:text-blue-600 transition-colors">
+      <div className="relative z-20 pb-4">
+        <div className="flex justify-end gap-6 px-4 sm:px-6 lg:px-20 text-2xl">
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-blue-600 transition-colors"
+            aria-label="Visit our Facebook page"
+          >
             <FaFacebook />
           </a>
-          <a href="#" className="hover:text-red-600 transition-colors">
+          <a
+            href="https://youtube.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-red-600 transition-colors"
+            aria-label="Visit our YouTube channel"
+          >
             <FaYoutube />
           </a>
-          <a href="#" className="hover:text-pink-600 transition-colors">
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-pink-600 transition-colors"
+            aria-label="Visit our Instagram page"
+          >
             <FaInstagram />
           </a>
         </div>
-      </footer>
+      </div>
 
       {/* Scroll Down Button */}
       <div className="text-xl lg:text-2xl absolute -bottom-14 lg:-bottom-16 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-4 lg:p-6 shadow-md hover:shadow-lg cursor-pointer animate-bounce">
