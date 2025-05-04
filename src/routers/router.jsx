@@ -13,6 +13,7 @@ import CartPage from "../pages/Cart/CartPage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import OrderConfirmationPage from "../pages/Checkout/OrderConfirmationPage";
 import UserOrdersPage from "../pages/User/UserOrdersPage";
+import SearchResultsPage from "../pages/Search/SearchResultsPage";
 import AdminLayout from "../pages/Admin/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
 import AdminBreedsPage from "../pages/Admin/Breeds/AdminBreedsPage";
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
       { path: "/blog", element: <BlogPage /> },
       { path: "/blog/:id", element: <BlogDetailPage /> },
       { path: "/contact", element: <ContactPage /> },
+      { path: "/search", element: <SearchResultsPage /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
       { path: "/cart", element: <CartPage /> },

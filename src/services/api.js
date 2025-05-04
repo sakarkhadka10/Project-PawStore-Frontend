@@ -392,4 +392,57 @@ export const deliverOrder = async (orderId) => {
   }
 };
 
+// Global Search
+export const searchAll = async (query) => {
+  try {
+    // Fetch data from multiple endpoints
+    const [breeds, accessories, blogs] = await Promise.all([
+      fetchBreeds(),
+      fetchAccessories(),
+      fetchBlogs(),
+    ]);
+
+    // Filter each dataset based on the search query
+    const filteredBreeds = breeds.filter(
+      (breed) =>
+        breed.name.toLowerCase().includes(query.toLowerCase()) ||
+        breed.description.toLowerCase().includes(query.toLowerCase()),
+    );
+
+    const filteredAccessories = accessories.filter(
+      (accessory) =>
+        accessory.name.toLowerCase().includes(query.toLowerCase()) ||
+        accessory.category.toLowerCase().includes(query.toLowerCase()),
+    );
+
+    const filteredBlogs = blogs.filter(
+      (blog) =>
+        blog.title.toLowerCase().includes(query.toLowerCase()) ||
+        blog.excerpt.toLowerCase().includes(query.toLowerCase()) ||
+        blog.content.toLowerCase().includes(query.toLowerCase()),
+    );
+
+    // Return the combined results
+    return {
+      breeds: filteredBreeds.map((breed) => ({
+        ...breed,
+        type: "breed",
+        url: `/breeds/${breed._id}`,
+      })),
+      accessories: filteredAccessories.map((accessory) => ({
+        ...accessory,
+        type: "accessory",
+        url: `/accessories`,
+      })),
+      blogs: filteredBlogs.map((blog) => ({
+        ...blog,
+        type: "blog",
+        url: `/blog/${blog._id}`,
+      })),
+    };
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
 export default api;
