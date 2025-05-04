@@ -81,7 +81,9 @@ const OrderConfirmationPage = () => {
               <h3 className="text-sm font-medium text-gray-500">
                 Total Amount
               </h3>
-              <p className="mt-1 font-medium">${order.totalPrice.toFixed(2)}</p>
+              <p className="mt-1 font-medium">
+                NPR {order.totalPrice.toFixed(2)}
+              </p>
             </div>
             <div>
               <h3 className="text-sm font-medium text-gray-500">
@@ -89,6 +91,36 @@ const OrderConfirmationPage = () => {
               </h3>
               <p className="mt-1 font-medium">{order.paymentMethod}</p>
             </div>
+
+            {/* Show payment status */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">
+                Payment Status
+              </h3>
+              <p
+                className={`mt-1 font-medium ${order.isPaid ? "text-green-600" : "text-amber-600"}`}
+              >
+                {order.isPaid
+                  ? `Paid on ${new Date(order.paidAt).toLocaleDateString()}`
+                  : "Awaiting Payment"}
+              </p>
+            </div>
+
+            {/* Show payment transaction details if paid */}
+            {order.isPaid && order.paymentResult && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">
+                  {order.paymentMethod === "PayPal"
+                    ? "PayPal Transaction ID"
+                    : order.paymentMethod === "Credit Card"
+                      ? "Card Payment ID"
+                      : "Transaction ID"}
+                </h3>
+                <p className="mt-1 font-medium text-xs break-all">
+                  {order.paymentResult.id}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -105,11 +137,11 @@ const OrderConfirmationPage = () => {
                 <div className="ml-4 flex-1">
                   <p className="font-medium">{item.name}</p>
                   <p className="text-sm text-gray-500">
-                    {item.quantity} x ${item.price.toFixed(2)}
+                    {item.quantity} x NPR {item.price.toFixed(2)}
                   </p>
                 </div>
                 <p className="font-medium">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  NPR {(item.price * item.quantity).toFixed(2)}
                 </p>
               </div>
             ))}
@@ -133,7 +165,7 @@ const OrderConfirmationPage = () => {
               <div className="flex justify-between">
                 <span>Subtotal:</span>
                 <span>
-                  $
+                  NPR{" "}
                   {(
                     order.totalPrice -
                     order.taxPrice -
@@ -143,15 +175,15 @@ const OrderConfirmationPage = () => {
               </div>
               <div className="flex justify-between">
                 <span>Tax:</span>
-                <span>${order.taxPrice.toFixed(2)}</span>
+                <span>NPR {order.taxPrice.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping:</span>
-                <span>${order.shippingPrice.toFixed(2)}</span>
+                <span>NPR {order.shippingPrice.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-semibold text-gray-800 pt-2 border-t border-gray-200">
                 <span>Total:</span>
-                <span>${order.totalPrice.toFixed(2)}</span>
+                <span>NPR {order.totalPrice.toFixed(2)}</span>
               </div>
             </div>
           </div>

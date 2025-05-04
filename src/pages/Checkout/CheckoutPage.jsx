@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FaArrowLeft,
-  FaSpinner,
-  FaCartShopping,
-  FaCircleCheck,
-} from "react-icons/fa6";
+import { FaArrowLeft, FaSpinner, FaCircleCheck } from "react-icons/fa6";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { createOrder } from "../../services/api";
@@ -23,7 +18,6 @@ const CheckoutPage = () => {
     country: "",
   });
 
-  const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Calculate prices
@@ -40,9 +34,7 @@ const CheckoutPage = () => {
     }));
   };
 
-  const handlePaymentMethodChange = (e) => {
-    setPaymentMethod(e.target.value);
-  };
+  // No payment handlers needed
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,10 +56,13 @@ const CheckoutPage = () => {
         product: item.product || item._id, // Use item.product if available (for authenticated users), otherwise use item._id
       }));
 
+      // Set a default payment method
+      const defaultPaymentMethod = "Cash on Delivery";
+
       const orderData = {
         orderItems,
         shippingAddress,
-        paymentMethod,
+        paymentMethod: defaultPaymentMethod,
         taxPrice,
         shippingPrice,
         totalPrice: parseFloat(totalOrderPrice),
@@ -83,6 +78,7 @@ const CheckoutPage = () => {
       // Navigate to order confirmation or order details page
       navigate(`/order-confirmation/${createdOrder._id}`);
     } catch (error) {
+      console.error("Error placing order:", error);
       toast.error(error.toString());
     } finally {
       setIsSubmitting(false);
@@ -172,54 +168,18 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            {/* Payment Method */}
+            {/* Payment Method - Cash on Delivery Only */}
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    id="cod"
-                    name="paymentMethod"
-                    value="Cash on Delivery"
-                    checked={paymentMethod === "Cash on Delivery"}
-                    onChange={handlePaymentMethodChange}
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-400"
-                  />
-                  <label htmlFor="cod" className="ml-2 text-gray-700">
-                    Cash on Delivery
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    id="creditCard"
-                    name="paymentMethod"
-                    value="Credit Card"
-                    checked={paymentMethod === "Credit Card"}
-                    onChange={handlePaymentMethodChange}
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-400"
-                  />
-                  <label htmlFor="creditCard" className="ml-2 text-gray-700">
-                    Credit Card
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    id="paypal"
-                    name="paymentMethod"
-                    value="PayPal"
-                    checked={paymentMethod === "PayPal"}
-                    onChange={handlePaymentMethodChange}
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-400"
-                  />
-                  <label htmlFor="paypal" className="ml-2 text-gray-700">
-                    PayPal
-                  </label>
-                </div>
+              <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                <p className="text-gray-700 font-medium">Cash on Delivery</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Pay when you receive your order
+                </p>
               </div>
             </div>
+
+            {/* No payment buttons needed */}
 
             {/* Navigation Buttons */}
             <div className="flex justify-between">
