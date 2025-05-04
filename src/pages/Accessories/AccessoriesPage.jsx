@@ -6,6 +6,7 @@ import {
   FaFilter,
   FaSpinner,
   FaCheck,
+  FaTrash,
 } from "react-icons/fa6";
 import { fetchAccessories } from "../../services/api";
 import { useCart } from "../../context/CartContext";
@@ -18,7 +19,7 @@ const AccessoriesPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addedToCart, setAddedToCart] = useState({});
-  const { addToCart, cartItems } = useCart();
+  const { addToCart, removeFromCart, cartItems } = useCart();
 
   // Function to check if a product is in the cart
   const isInCart = (productId) => {
@@ -50,7 +51,7 @@ const AccessoriesPage = () => {
     getAccessories();
   }, [activeCategory]);
 
-  // Function to handle adding product to cart
+  // Function to handle toggling product in cart (add/remove)
   const handleAddToCart = (product) => {
     // Check if product is in stock
     if (product.countInStock <= 0) {
@@ -63,13 +64,18 @@ const AccessoriesPage = () => {
 
     // Check if product is already in cart
     if (isInCart(product._id)) {
-      toast.success(`${product.name} is already in your cart!`, {
+      // Remove from cart
+      removeFromCart(product._id);
+
+      // Show toast notification
+      toast.success(`${product.name} removed from cart!`, {
         position: "bottom-right",
         duration: 2000,
       });
       return;
     }
 
+    // Add to cart
     addToCart(product);
 
     // Show visual feedback
@@ -201,22 +207,26 @@ const AccessoriesPage = () => {
                     <button
                       onClick={() => handleAddToCart(product)}
                       className={`${
-                        addedToCart[product._id] || isInCart(product._id)
-                          ? "bg-green-600 hover:bg-green-700"
-                          : product.countInStock > 0
-                            ? "bg-amber-600 hover:bg-amber-700"
-                            : "bg-gray-400 cursor-not-allowed"
+                        isInCart(product._id)
+                          ? "bg-red-600 hover:bg-red-700"
+                          : addedToCart[product._id]
+                            ? "bg-green-600 hover:bg-green-700"
+                            : product.countInStock > 0
+                              ? "bg-amber-600 hover:bg-amber-700"
+                              : "bg-gray-400 cursor-not-allowed"
                       } text-white p-2 rounded-full transition-colors`}
                       disabled={product.countInStock === 0}
                       title={
                         product.countInStock === 0
                           ? "Out of stock"
                           : isInCart(product._id)
-                            ? "Already in cart"
+                            ? "Remove from cart"
                             : "Add to cart"
                       }
                     >
-                      {addedToCart[product._id] || isInCart(product._id) ? (
+                      {isInCart(product._id) ? (
+                        <FaTrash />
+                      ) : addedToCart[product._id] ? (
                         <FaCheck />
                       ) : product.countInStock > 0 ? (
                         <FaCartShopping />
