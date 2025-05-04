@@ -61,7 +61,7 @@ const CheckoutPage = () => {
         quantity: item.quantity,
         image: item.image,
         price: item.price,
-        product: item._id,
+        product: item.product || item._id, // Use item.product if available (for authenticated users), otherwise use item._id
       }));
 
       const orderData = {
@@ -274,11 +274,11 @@ const CheckoutPage = () => {
                     <div className="ml-3 flex-1">
                       <p className="text-sm font-medium">{item.name}</p>
                       <p className="text-xs text-gray-500">
-                        {item.quantity} x ${item.price.toFixed(2)}
+                        {item.quantity} x NPR {item.price.toFixed(2)}
                       </p>
                     </div>
                     <p className="font-medium">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      NPR {(item.price * item.quantity).toFixed(2)}
                     </p>
                   </div>
                 ))}
