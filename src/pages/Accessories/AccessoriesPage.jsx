@@ -23,7 +23,11 @@ const AccessoriesPage = () => {
 
   // Function to check if a product is in the cart
   const isInCart = (productId) => {
-    return cartItems.some((item) => item._id === productId);
+    return cartItems.some(
+      (item) =>
+        // Check both _id (for local storage) and product (for backend)
+        item._id === productId || item.product === productId,
+    );
   };
 
   const categories = [

@@ -6,13 +6,20 @@ import {
   FaPlus,
   FaArrowLeft,
   FaCartShopping,
+  FaSpinner,
 } from "react-icons/fa6";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 
 const CartPage = () => {
-  const { cartItems, totalPrice, removeFromCart, updateQuantity, clearCart } =
-    useCart();
+  const {
+    cartItems,
+    totalPrice,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    loading,
+  } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -28,7 +35,11 @@ const CartPage = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
 
-      {cartItems.length === 0 ? (
+      {loading ? (
+        <div className="flex justify-center items-center py-20">
+          <FaSpinner className="animate-spin text-amber-600 text-4xl" />
+        </div>
+      ) : cartItems.length === 0 ? (
         <div className="bg-white rounded-xl shadow-lg p-8 text-center">
           <div className="flex justify-center mb-4">
             <FaCartShopping className="text-gray-400 text-6xl" />
@@ -86,7 +97,10 @@ const CartPage = () => {
                       <div className="flex items-center border border-gray-300 rounded-lg mr-4">
                         <button
                           onClick={() =>
-                            updateQuantity(item._id, item.quantity - 1)
+                            updateQuantity(
+                              item.product || item._id,
+                              item.quantity - 1,
+                            )
                           }
                           className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
                         >
@@ -97,7 +111,10 @@ const CartPage = () => {
                         </span>
                         <button
                           onClick={() =>
-                            updateQuantity(item._id, item.quantity + 1)
+                            updateQuantity(
+                              item.product || item._id,
+                              item.quantity + 1,
+                            )
                           }
                           className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
                           disabled={item.quantity >= item.countInStock}
@@ -106,7 +123,7 @@ const CartPage = () => {
                         </button>
                       </div>
                       <button
-                        onClick={() => removeFromCart(item._id)}
+                        onClick={() => removeFromCart(item.product || item._id)}
                         className="text-red-600 hover:text-red-700 transition-colors"
                       >
                         <FaTrash />

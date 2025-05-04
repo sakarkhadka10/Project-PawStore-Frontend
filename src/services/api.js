@@ -392,6 +392,52 @@ export const deliverOrder = async (orderId) => {
   }
 };
 
+// Cart API calls
+export const getUserCart = async () => {
+  try {
+    const { data } = await api.get("/cart");
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const addItemToCart = async (productId, quantity) => {
+  try {
+    const { data } = await api.post("/cart", { productId, quantity });
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const updateCartItem = async (productId, quantity) => {
+  try {
+    const { data } = await api.put(`/cart/${productId}`, { quantity });
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const removeCartItem = async (productId) => {
+  try {
+    const { data } = await api.delete(`/cart/${productId}`);
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const clearCart = async () => {
+  try {
+    const { data } = await api.delete("/cart");
+    return data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
 // Global Search
 export const searchAll = async (query) => {
   try {
