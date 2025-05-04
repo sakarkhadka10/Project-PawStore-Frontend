@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_URL = "https://pawstore-backend-6iqi.onrender.com/api";
+// Use environment variable for API URL with fallback
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://pawstore-backend-6iqi.onrender.com/api";
 
 // Create axios instance
 const api = axios.create({

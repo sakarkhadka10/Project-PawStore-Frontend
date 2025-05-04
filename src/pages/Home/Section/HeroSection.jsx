@@ -36,7 +36,7 @@ const HeroSection = () => {
           <span className="inline-block bg-amber-200 text-amber-800 px-4 py-1 rounded-full text-sm font-medium mb-4">
             Find Your Perfect Companion
           </span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center lg:text-start leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-start leading-tight">
             Everybody needs a <span className="text-amber-600">friend</span> in
             Life.
           </h1>
