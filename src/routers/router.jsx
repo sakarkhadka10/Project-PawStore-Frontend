@@ -13,6 +13,7 @@ import CartPage from "../pages/Cart/CartPage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import OrderConfirmationPage from "../pages/Checkout/OrderConfirmationPage";
 import UserOrdersPage from "../pages/User/UserOrdersPage";
+import ProfilePage from "../pages/User/ProfilePage";
 import SearchResultsPage from "../pages/Search/SearchResultsPage";
 import AdminLayout from "../pages/Admin/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
@@ -68,6 +69,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <UserOrdersPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         ),
       },
